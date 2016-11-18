@@ -35,7 +35,6 @@ public class AddressBookFXMLController implements Initializable {
                 people.add(new Person(components[0], components[1], components[2]));
             }
             Collections.sort(people);
-            for(Person p : people) System.out.println(p);
         }catch(IOException e){
             Logger.getLogger(AddressBookFXMLController.class.getName()).log(Level.SEVERE, null, e);
         }
