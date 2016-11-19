@@ -14,6 +14,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -21,7 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class AddressBookFXMLController implements Initializable {
-    private final ObservableList<String> data = FXCollections.observableArrayList("sasasas", "sasasas", "dasdsa");
+    private ArrayList<Person> people;
     @FXML
     private Button searchButton, exitButton;
     @FXML
@@ -32,11 +34,35 @@ public class AddressBookFXMLController implements Initializable {
     private TableColumn<Person, String> nameColumn, lastNameColumn, emailColumn;
     @FXML
     private void searchAction(ActionEvent event) {
-        ObservableList<Person> rows = FXCollections.observableArrayList(readFile());
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("name"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
-        emailColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
-        informationTableView.setItems(rows);
+        if(people == null){
+            try{
+                readFile();
+            }catch(IllegalArgumentException e){
+                Alert incorrectFormatAlert = new Alert(AlertType.ERROR);
+                incorrectFormatAlert.setHeaderText(e.getMessage());
+                incorrectFormatAlert.showAndWait();
+            }
+        }
+        String name = nameTextField.getText().trim(), lastName = lastNameTextField.getText().trim(),
+                email = emailTextField.getText().trim();
+        if((name.equals("") || isCorrectName(name)) && (lastName.equals("") || isCorrectName(lastName)) && (email.equals("") || isCorrectEmail(email))){
+            ObservableList<Person> rows = FXCollections.observableArrayList();
+            for(Person p : people)
+                if(!name.equals("") && p.getName().equals(name) || name.equals(""))
+                    if(!lastName.equals("") && p.getLastName().equals(lastName) || lastName.equals(""))
+                        if(!email.equals("") && p.getEmail().equals(email) || email.equals(""))
+                            rows.add(p);
+            nameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("name"));
+            lastNameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
+            emailColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
+            informationTableView.setItems(rows);
+        }else{
+            Alert incorrectFormatAlert = new Alert(AlertType.ERROR);
+            incorrectFormatAlert.setHeaderText("Złe dane. Imię i nazwisko powinno składać się z liter, "
+                    + "a email mieć postać: tekst@tekst.test,\n gdzie tekst to liczby, małe litery, duże litery. "
+                    + "Tekst po @ może wystąpić w dowolnej liczbie,\n lecz ma być oddzielony kropką.");
+            incorrectFormatAlert.showAndWait();
+        }
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -44,19 +70,36 @@ public class AddressBookFXMLController implements Initializable {
            System.exit(0); 
         });
     }    
-    private ArrayList<Person> readFile(){
-        ArrayList<Person> people = new ArrayList();
+    private void readFile() throws IllegalArgumentException{
+        people = new ArrayList();
         try(BufferedReader file = new BufferedReader(new FileReader("Kontakty.txt"))){
             String line;
             String[] components;
             while((line = file.readLine()) != null){
                 components = line.split("\\|");
-                people.add(new Person(components[0], components[1], components[2]));
+                if(isCorrectFileFormat(components))
+                    people.add(new Person(components[0], components[1], components[2]));
+                else{
+                    people = null;
+                    throw new IllegalArgumentException("Niepoprawny format zawartości pliku."
+                            + " Każda linia powinna zawierać 3 wartości oddzielone |.\n Imię i nazwisko "
+                            + "powinno składać się z liter, a email mieć postać: tekst@tekst.tekst,\n gdzie tekst to liczby, małe litery, duże litery."
+                            + " Tekst po @ może wystąpić w dowolnej liczbie,\n lecz ma być oddzielony kropką.");
+                }
             }
             Collections.sort(people);
         }catch(IOException e){
             Logger.getLogger(AddressBookFXMLController.class.getName()).log(Level.SEVERE, null, e);
         }
-        return people;
+    }
+    private boolean isCorrectFileFormat(String[] components){
+        return components.length == 3 && isCorrectName(components[0]) && 
+                isCorrectName(components[1]) && isCorrectEmail(components[2]);
+    }
+    private boolean isCorrectName(String name){
+        return name.matches("[a-zA-z]+");
+    }
+    private boolean isCorrectEmail(String email){
+        return email.matches("[a-zA-z0-9]+@[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)+");
     }
 }
