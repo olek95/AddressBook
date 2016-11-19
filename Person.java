@@ -8,12 +8,12 @@ public class Person implements Comparable<Person>{
         this.email = email; 
     }
     public int compareTo(Person p){
-        if(name.compareTo(p.name) < 0)return -1;
-        else if(name.compareTo(p.name) > 0) return 1; 
-        else if(name.compareTo(p.name) == 0)
-            if(lastName.compareTo(p.lastName) < 0) return -1;
-            else if(lastName.compareTo(p.lastName) > 0) return 1; 
-            else if(lastName.compareTo(p.lastName) == 0)
+        if(lastName.compareTo(p.lastName) < 0)return -1;
+        else if(lastName.compareTo(p.lastName) > 0) return 1; 
+        else if(lastName.compareTo(p.lastName) == 0)
+            if(name.compareTo(p.name) < 0) return -1;
+            else if(name.compareTo(p.name) > 0) return 1; 
+            else if(name.compareTo(p.name) == 0)
                 if(email.compareTo(p.email) < 0) return -1; 
                 else if(email.compareTo(p.email) > 0) return 1;
         return 0;
