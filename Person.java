@@ -18,4 +18,13 @@ public class Person implements Comparable<Person>{
                 else if(email.compareTo(p.email) > 0) return 1;
         return 0;
     }
+    public String getName(){
+        return name;
+    }
+    public String getLastName(){
+        return lastName;
+    }
+    public String getEmail(){
+        return email;
+    }
 }
