@@ -9,23 +9,42 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class AddressBookFXMLController implements Initializable {
+    private final ObservableList<String> data = FXCollections.observableArrayList("sasasas", "sasasas", "dasdsa");
     @FXML
-    private Button searchButton;
+    private Button searchButton, exitButton;
+    @FXML
+    private TextField nameTextField, lastNameTextField, emailTextField;
+    @FXML
+    private TableView<Person> informationTableView;
+    @FXML
+    private TableColumn<Person, String> nameColumn, lastNameColumn, emailColumn;
     @FXML
     private void searchAction(ActionEvent event) {
-        readFile();
+        ObservableList<Person> rows = FXCollections.observableArrayList(readFile());
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("name"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
+        informationTableView.setItems(rows);
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //TODO
+        exitButton.setOnAction(event -> {
+           System.exit(0); 
+        });
     }    
-    private void readFile(){
+    private ArrayList<Person> readFile(){
         ArrayList<Person> people = new ArrayList();
         try(BufferedReader file = new BufferedReader(new FileReader("Kontakty.txt"))){
             String line;
@@ -38,5 +57,6 @@ public class AddressBookFXMLController implements Initializable {
         }catch(IOException e){
             Logger.getLogger(AddressBookFXMLController.class.getName()).log(Level.SEVERE, null, e);
         }
+        return people;
     }
 }
