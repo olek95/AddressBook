@@ -22,6 +22,19 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+/**
+ * Klasa <code>AddressBookFXMLController</code> reprezentuje sterowanie programem 
+ * będącym książką zawierającą adresy mailowe. Ksiązka ta zapisana jest w pliku tekstowym
+ * w formacie imię|nazwisko|mail, gdzie imię i nazwisko składa się tylko z liter, 
+ * a mail jest postaci: tekst@tekst.tekst, gdzie tekst (litery + liczby) po znaku @ może występować 
+ * dowolną liczbę razy, lecz musi być oddzielony kropką. Przykładowy prawidłowy rekord: 
+ * Aleksander|Sklorz|olek1995@poczta.onet.pl
+ * Klasa ta wyświetla wczytane, posortowane dane w tabeli. Posiada pola tekstowe
+ * zezwalające na wyszukanie konkretnych rekordów. Pozostawienie pustego pola 
+ * wyświetla dowolną wartość w danej kolumnie. Klasa zabezpieczona przed 
+ * niepoprawnym formatem zawartości pliku lub wprowadzonych danych w polach tekstowych w programie. 
+ * @author AleksanderSklorz
+ */
 public class AddressBookFXMLController implements Initializable {
     private ArrayList<Person> people;
     @FXML
