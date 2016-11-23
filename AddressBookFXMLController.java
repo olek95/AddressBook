@@ -37,7 +37,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class AddressBookFXMLController implements Initializable {
     @FXML
-    private Button searchButton, exitButton;
+    private Button exitButton;
     @FXML
     private TextField nameTextField, lastNameTextField, emailTextField;
     @FXML
@@ -59,9 +59,9 @@ public class AddressBookFXMLController implements Initializable {
                         if(!lastName.equals("") && p.getLastName().equals(lastName) || lastName.equals(""))
                             if(!email.equals("") && p.getEmail().equals(email) || email.equals(""))
                                 rows.add(p);
-                nameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("name"));
-                lastNameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
-                emailColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
+                nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
+                lastNameColumn.setCellValueFactory(new PropertyValueFactory("lastName"));
+                emailColumn.setCellValueFactory(new PropertyValueFactory("email"));
                 informationTableView.setItems(rows);
             }else{
                 Alert incorrectFormatAlert = new Alert(AlertType.ERROR);
