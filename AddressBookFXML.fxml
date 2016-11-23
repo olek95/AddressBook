@@ -37,9 +37,9 @@
          <center>
             <TableView fx:id="informationTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn editable="false" prefWidth="293.0" sortable="false" text="IMIĘ" />
-                <TableColumn editable="false" prefWidth="293.0" sortable="false" text="NAZWISKO" />
-                  <TableColumn editable="false" prefWidth="293.0" sortable="false" text="ADRES EMAIL" />
+                <TableColumn fx:id="nameColumn" editable="false" prefWidth="295.6" sortable="false" text="IMIĘ" />
+                <TableColumn fx:id="lastNameColumn" editable="false" prefWidth="295.6" sortable="false" text="NAZWISKO" />
+                  <TableColumn fx:id="emailColumn" editable="false" prefWidth="295.6" sortable="false" text="ADRES EMAIL" />
               </columns>
             </TableView>
          </center>
