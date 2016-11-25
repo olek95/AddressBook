@@ -55,9 +55,8 @@ public class AddressBookFXMLController implements Initializable {
             if((name.equals("") || isCorrectName(name)) && (lastName.equals("") || isCorrectName(lastName)) && (email.equals("") || isCorrectEmail(email))){
                 ObservableList<Person> rows = FXCollections.observableArrayList();
                 for(Person p : people)
-                    if(!name.equals("") && p.getName().equals(name) || name.equals(""))
-                        if(!lastName.equals("") && p.getLastName().equals(lastName) || lastName.equals(""))
-                            if(!email.equals("") && p.getEmail().equals(email) || email.equals(""))
+                    if((name.equals("") || p.getName().equals(name)) && (lastName.equals("") || p.getLastName().equals(lastName))
+                            && (email.equals("") || p.getEmail().equals(email)))
                                 rows.add(p);
                 nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
                 lastNameColumn.setCellValueFactory(new PropertyValueFactory("lastName"));
